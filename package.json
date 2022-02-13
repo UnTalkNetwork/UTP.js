@@ -1,0 +1,46 @@
+{
+  "name": "utp.js",
+  "version": "1.0.0",
+  "description": "Universal Typed Protocol",
+  "author": {
+    "name": "F1int",
+    "email": "flint@t2me.net"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UnTalkNetwork/utp.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UnTalkNetwork/utp.js/issues",
+    "email": "flint@t2me.net"
+  },
+  "keywords": [
+    "utp",
+    "utp.js",
+    "protocol",
+    "binary",
+    "typed",
+    "universal",
+    "rpc",
+    "restful",
+    "app",
+    "api",
+    "websocket",
+    "rest"
+  ],
+  "homepage": "https://github.com/UnTalkNetwork/utp.js/",
+  "engines": {
+    "node": ">= 10"
+  },
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-vm-modules $(yarn bin jest)",
+    "benchmark": "node benchmark/speed"
+  },
+  "devDependencies": {
+    "benchmark": "^2.1.4",
+    "jest": "^27.4.7"
+  }
+}
