@@ -38,7 +38,7 @@
   "scripts": {
     "build": "yarn rollup src/main.js -o index.js -f es",
     "test": "node --experimental-vm-modules $(yarn bin jest)",
-    "benchmark": "node benchmark/speed"
+    "bench": "node benchmark/speed"
   },
   "devDependencies": {
     "benchmark": "^2.1.4",

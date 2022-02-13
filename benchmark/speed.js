@@ -1,6 +1,6 @@
 import Benchmark from 'benchmark'
 import './info.js'
-import UTP from '../src/index.js'
+import UTP from '../index.js'
 
 const suite = new Benchmark.Suite
 UTP.addSchema('TEST_DATA', [
@@ -19,10 +19,10 @@ const DATA = {
   name: 'name',
   data: [{
     int: 128,
-    text: 'text'
+    text: 'hello!'
   }, {
-    int: 128,
-    text: 'text'
+    int: 129,
+    text: 'Hi!'
   }]
 }
 const ENCODED = UTP.encode('SPEED_TEST', DATA)
