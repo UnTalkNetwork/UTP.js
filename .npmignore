@@ -1,3 +1,7 @@
 # Irrelevant files and folders
+node_modules
 benchmark
 test
+src
+.gitignore
+yarn.lock

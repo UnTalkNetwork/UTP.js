@@ -12,12 +12,12 @@ const DEFS = {
     FLOAT: { bits: 64, float: true },
     DATE: { bits: 64 },             // timestamp with milliseconds
     ENUM: { bits: 16 },             // predefined lists
-    BINARY: {},                     // binary data (8 bits) with fixed length (INT64)
+    BINARY: {},                     // binary data
     STRING: {},                     // multi-byte string (1-4 bytes)
     ARRAY: {},                      // typed array of all available types include array too
     JSON: {},                       // stored as string after tests
     SCHEMA: {},                     // array of fields
-    PACKET: {}                      // { type: schema name, data: packet of schema }
+    PACKET: {}                      // { schema: schema name, data: packet of schema }
   },
   SCHEMES_NAMES: [
     'PING', 'PONG', 'HELLO', 'ERROR',
