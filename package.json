@@ -1,7 +1,7 @@
 {
   "name": "utp.js",
   "version": "1.0.0",
-  "description": "Universal Typed Protocol",
+  "description": "Universal Typed Protocol for Node.js and Browsers",
   "author": {
     "name": "F1int",
     "email": "flint@t2me.net"
@@ -9,10 +9,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/UnTalkNetwork/utp.js.git"
+    "url": "https://github.com/UnTalkNetwork/UTP.js.git"
   },
   "bugs": {
-    "url": "https://github.com/UnTalkNetwork/utp.js/issues",
+    "url": "https://github.com/UnTalkNetwork/UTP.js/issues",
     "email": "flint@t2me.net"
   },
   "keywords": [
@@ -29,7 +29,7 @@
     "websocket",
     "rest"
   ],
-  "homepage": "https://github.com/UnTalkNetwork/utp.js/",
+  "homepage": "https://github.com/UnTalkNetwork/UTP.js/",
   "engines": {
     "node": ">= 10"
   },
