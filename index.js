@@ -1,4 +1,5 @@
-const DEFS = {
+// src/defs.js
+var DEFS = {
   VERSION: 1,
   TYPES: {
     BOOL: { bits: 8 },
@@ -10,18 +11,24 @@ const DEFS = {
     INT32: { bits: 32, signed: true },
     INT64: { bits: 64 },
     FLOAT: { bits: 64, float: true },
-    DATE: { bits: 64 },             // timestamp with milliseconds
-    ENUM: { bits: 16 },             // predefined lists
-    BINARY: {},                     // binary data
-    STRING: {},                     // multi-byte string (1-4 bytes)
-    ARRAY: {},                      // typed array of all available types include array too
-    JSON: {},                       // stored as string after tests
-    SCHEMA: {},                     // array of fields
-    PACKET: {}                      // { schema: schema name, data: packet of schema }
+    DATE: { bits: 64 },
+    ENUM: { bits: 16 },
+    BINARY: {},
+    STRING: {},
+    ARRAY: {},
+    JSON: {},
+    SCHEMA: {},
+    PACKET: {}
   },
   SCHEMES_NAMES: [
-    'PING', 'PONG', 'HELLO', 'ERROR',
-    'SCHEMA_ITEMS', 'SCHEMA', 'PROTO', 'RPC'
+    "PING",
+    "PONG",
+    "HELLO",
+    "ERROR",
+    "SCHEMA_ITEMS",
+    "SCHEMA",
+    "PROTO",
+    "RPC"
   ],
   TYPES_NAMES: [],
   SCHEMES: [],
@@ -29,60 +36,51 @@ const DEFS = {
   RPC: [],
   SIZE_SIZE: 4,
   HEADER_SIZE: 10,
-  TEMP_NAME: '__TEMP_NAME__',
+  TEMP_NAME: "__TEMP_NAME__",
   MAX_UINT32: 4294967295,
   IS_LOCKED: true,
   compile: () => {
-    // create packets index
     DEFS.SCHEMES_NAMES.forEach((value, index) => DEFS.INDEX[value] = index);
   }
 };
-
-// create types names
 for (let TYPE in DEFS.TYPES) {
   DEFS.TYPES_NAMES.push(TYPE);
 }
-
-// compile protocol indexes
 DEFS.compile();
-
 DEFS.SCHEMES[DEFS.INDEX.PING] = DEFS.SCHEMES[DEFS.INDEX.PONG] = DEFS.SCHEMES[DEFS.INDEX.HELLO] = [];
-
 DEFS.SCHEMES[DEFS.INDEX.ERROR] = [
-  { name: 'code', type: 'UINT16' },
-  { name: 'text', type: 'STRING' }
+  { name: "code", type: "UINT16" },
+  { name: "text", type: "STRING" }
 ];
-
 DEFS.SCHEMES[DEFS.INDEX.SCHEMA_ITEMS] = [
-  { name: 'type', type: 'ENUM', list: DEFS.TYPES_NAMES },
-  { name: 'schema', type: 'STRING', optional: true },
-  { name: 'items', type: 'SCHEMA', schema: 'SCHEMA_ITEMS', optional: true },
-  { name: 'list', type: 'ARRAY', items: { type: 'STRING' }, optional: true }
+  { name: "type", type: "ENUM", list: DEFS.TYPES_NAMES },
+  { name: "schema", type: "STRING", optional: true },
+  { name: "items", type: "SCHEMA", schema: "SCHEMA_ITEMS", optional: true },
+  { name: "list", type: "ARRAY", items: { type: "STRING" }, optional: true }
 ];
-
 DEFS.SCHEMES[DEFS.INDEX.SCHEMA] = [
-  { name: 'name', type: 'STRING' },
-  { name: 'type', type: 'ENUM', list: DEFS.TYPES_NAMES },
-  { name: 'items', type: 'SCHEMA', schema: 'SCHEMA_ITEMS', optional: true },
-  { name: 'schema', type: 'STRING', optional: true },
-  { name: 'list', type: 'ARRAY', items: { type: 'STRING' }, optional: true },
-  { name: 'maxlength', type: 'INT32', optional: true },
-  { name: 'optional', type: 'BOOL', optional: true }
+  { name: "name", type: "STRING" },
+  { name: "type", type: "ENUM", list: DEFS.TYPES_NAMES },
+  { name: "items", type: "SCHEMA", schema: "SCHEMA_ITEMS", optional: true },
+  { name: "schema", type: "STRING", optional: true },
+  { name: "list", type: "ARRAY", items: { type: "STRING" }, optional: true },
+  { name: "maxlength", type: "INT32", optional: true },
+  { name: "optional", type: "BOOL", optional: true }
 ];
-
 DEFS.SCHEMES[DEFS.INDEX.PROTO] = [
-  { name: 'VERSION', type: 'UINT32' },
-  { name: 'TYPES', type: 'JSON' },
-  { name: 'SCHEMES_NAMES', type: 'ARRAY', items: { type: 'STRING' } },
-  { name: 'SCHEMES', type: 'ARRAY', items: { type: 'ARRAY', items: { type: 'SCHEMA', schema: 'SCHEMA' } } }
+  { name: "VERSION", type: "UINT32" },
+  { name: "TYPES", type: "JSON" },
+  { name: "SCHEMES_NAMES", type: "ARRAY", items: { type: "STRING" } },
+  { name: "SCHEMES", type: "ARRAY", items: { type: "ARRAY", items: { type: "SCHEMA", schema: "SCHEMA" } } }
 ];
-
 DEFS.SCHEMES[DEFS.INDEX.RPC] = [
-  { name: 'method', type: 'STRING' },
-  { name: 'packet', type: 'PACKET', optional: true }
+  { name: "method", type: "STRING" },
+  { name: "packet", type: "PACKET", optional: true }
 ];
+var defs_default = DEFS;
 
-var ErrorsCodes = {
+// src/errors.js
+var errors_default = {
   SCHEMA_NOT_FOUND: 1,
   INVALID_HEADER: 2,
   INVALID_INPUT_DATA: 3,
@@ -93,43 +91,28 @@ var ErrorsCodes = {
   PACK_ERROR: 8,
   UNPACK_ERROR: 9,
   INCORRECT_PACKET_SIZE: 10,
-  INVALID_RPC_INPUT_DATA: 11,
+  INVALID_RPC_INPUT_DATA: 11
 };
 
-/**
- * 
- * Binary tools
- * 
- */
-
-const stringDecoder = new TextDecoder();
-const stringEncoder = new TextEncoder();
-
-/**
- * Pack number
- * @param {number} value integer or float
- * @param {!{bits: number,
- *   float: (boolean|undefined),
- *   signed: (boolean|undefined)}} options 
- * @returns {ArrayBuffer}
- * @throws {string}
- */
+// src/tools.js
+var stringDecoder = new TextDecoder();
+var stringEncoder = new TextEncoder();
 function pack(value, options) {
   if (options.float) {
     if (![32, 64].includes(options.bits)) {
-      throw new Error('Incorrect bits for value (float)')
+      throw new Error("Incorrect bits for value (float)");
     }
     let buffer = new ArrayBuffer(options.bits / 8);
     if (options.bits === 32) {
       new DataView(buffer).setFloat32(0, value);
-      return buffer
+      return buffer;
     } else {
       new DataView(buffer).setFloat64(0, value);
-      return buffer
+      return buffer;
     }
   } else {
     if (![8, 16, 32, 64].includes(options.bits)) {
-      throw new Error('Incorrect bits for value (integer)')
+      throw new Error("Incorrect bits for value (integer)");
     }
     let buffer = new ArrayBuffer(options.bits / 8);
     if (options.bits === 8) {
@@ -138,7 +121,7 @@ function pack(value, options) {
       } else {
         new DataView(buffer).setUint8(0, value);
       }
-      return buffer
+      return buffer;
     }
     if (options.bits === 16) {
       if (options.signed) {
@@ -146,7 +129,7 @@ function pack(value, options) {
       } else {
         new DataView(buffer).setUint16(0, value);
       }
-      return buffer
+      return buffer;
     }
     if (options.bits === 32) {
       if (options.signed) {
@@ -154,204 +137,139 @@ function pack(value, options) {
       } else {
         new DataView(buffer).setUint32(0, value);
       }
-      return buffer
+      return buffer;
     }
     if (options.bits === 64) {
       new DataView(buffer).setFloat64(0, value);
-      return buffer
+      return buffer;
     }
   }
-  throw new Error('Incompatible options')
+  throw new Error("Incompatible options");
 }
-
-/**
- * Unpack number
- * @param {ArrayBuffer} buffer 
- * @param {!{bits: number,
- *   float: (boolean|undefined),
- *   signed: (boolean|undefined)}} options
- * @param {number} offset
- * @returns {number}
- * @throws {string}
- */
 function unpack(buffer, options, offset) {
   const view = new DataView(buffer, offset || 0);
   if (options.float) {
     if (![32, 64].includes(options.bits)) {
-      throw new Error('Incorrect bits for value (float)')
+      throw new Error("Incorrect bits for value (float)");
     }
     if (options.bits === 32) {
-      return view.getFloat32()
+      return view.getFloat32();
     } else {
-      return view.getFloat64()
+      return view.getFloat64();
     }
   } else {
     if (![8, 16, 32, 64].includes(options.bits)) {
-      throw new Error('Incorrect bits for value (integer)')
+      throw new Error("Incorrect bits for value (integer)");
     }
     if (options.bits === 8) {
-      return options.signed ? view.getInt8() : view.getUint8()
+      return options.signed ? view.getInt8() : view.getUint8();
     }
     if (options.bits === 16) {
-      return options.signed ? view.getInt16() : view.getUint16()
+      return options.signed ? view.getInt16() : view.getUint16();
     }
     if (options.bits === 32) {
-      return options.signed ? view.getInt32() : view.getUint32()
+      return options.signed ? view.getInt32() : view.getUint32();
     }
     if (options.bits === 64) {
-      return parseInt(view.getFloat64(0))
+      return parseInt(view.getFloat64(0));
     }
   }
-  throw new Error('Incompatible options')
+  throw new Error("Incompatible options");
 }
-
-/**
- * Pack string
- * @param {string} value 
- * @returns {ArrayBuffer}
- */
 function packString(value) {
   try {
-    return stringEncoder.encode(value).buffer
+    return stringEncoder.encode(value).buffer;
   } catch (err) {
-    throw new Error(`packString error: ${err.message}`)
+    throw new Error(`packString error: ${err.message}`);
   }
 }
-
-/**
- * Unpack string
- * @param {Uint8Array} buffer 
- * @returns {string}
- */
 function unpackString(buffer) {
   try {
-    return stringDecoder.decode(buffer)
+    return stringDecoder.decode(buffer);
   } catch (err) {
-    throw new Error(`unpackString error: ${err.message}`)
+    throw new Error(`unpackString error: ${err.message}`);
   }
 }
 
-/**
- * @param {object} protocol - Protocol definitions
- */
+// src/update.js
 function update(protocol) {
-  DEFS.VERSION = protocol.VERSION;
-  DEFS.TYPES = protocol.TYPES;
-  DEFS.SCHEMES_NAMES = protocol.SCHEMES_NAMES;
-  DEFS.SCHEMES = protocol.SCHEMES;
-  DEFS.compile();
+  defs_default.VERSION = protocol.VERSION;
+  defs_default.TYPES = protocol.TYPES;
+  defs_default.SCHEMES_NAMES = protocol.SCHEMES_NAMES;
+  defs_default.SCHEMES = protocol.SCHEMES;
+  defs_default.compile();
 }
-
 function getVersion() {
-  return DEFS.VERSION
+  return defs_default.VERSION;
 }
-
 function setVersion(version) {
-  DEFS.VERSION = version;
+  defs_default.VERSION = version;
 }
-
-/**
- * 
- * @param {string} name - Schema name
- * @param {object} fields - Fields definitions
- * @returns 
- */
 function addSchema(name, fields = []) {
-  if (DEFS.SCHEMES_NAMES.indexOf(name) > -1) {
-    throw new Error(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Schema "${name}" already in use`)
+  if (defs_default.SCHEMES_NAMES.indexOf(name) > -1) {
+    throw new Error(`${errors_default.INVALID_INPUT_DATA_VALUE}: Schema "${name}" already in use`);
   }
-
   if (!Array.isArray(fields)) {
-    throw new Error(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Fields is not array`)
+    throw new Error(`${errors_default.INVALID_INPUT_DATA_VALUE}: Fields is not array`);
   }
-
-  const index = DEFS.SCHEMES_NAMES.length;
-  DEFS.SCHEMES_NAMES.push(name);
-  DEFS.INDEX[name] = index;
-  DEFS.SCHEMES[index] = fields;
-  DEFS.compile();
-
-  return DEFS.SCHEMES[DEFS.INDEX[name]]
+  const index = defs_default.SCHEMES_NAMES.length;
+  defs_default.SCHEMES_NAMES.push(name);
+  defs_default.INDEX[name] = index;
+  defs_default.SCHEMES[index] = fields;
+  defs_default.compile();
+  return defs_default.SCHEMES[defs_default.INDEX[name]];
 }
-
 function addSchemes(schemes) {
   for (let schema in schemes) {
     addSchema(schema, schemes[schema]);
   }
 }
-
-/**
- * @param {bool} isLocked 
- */
 function setLock(isLocked) {
-  DEFS.IS_LOCKED = !!isLocked;
+  defs_default.IS_LOCKED = !!isLocked;
 }
 
-/**
- * @param {Uint8Array} data - Data to decoding
- * @returns {object} Decoded object with header and data { header, data }
- */
+// src/decode.js
 function decode(data) {
-  if (data === undefined || typeof data !== 'object') {
-    throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA}: Data is missing or not object`)
+  if (data === void 0 || typeof data !== "object") {
+    throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA}: Data is missing or not object`);
   }
-  // HELLO PING PONG
   if (data.length === 4) {
-    const schemaIndex = unpack(data.buffer, DEFS.TYPES.INT16);
+    const schemaIndex = unpack(data.buffer, defs_default.TYPES.INT16);
     return {
       header: {
         schemaIndex,
-        packetIndex: unpack(data.buffer, DEFS.TYPES.INT16, 2),
-        schemaName: DEFS.SCHEMES_NAMES[schemaIndex],
+        packetIndex: unpack(data.buffer, defs_default.TYPES.INT16, 2),
+        schemaName: defs_default.SCHEMES_NAMES[schemaIndex]
       }
-    }
+    };
   }
-  
   const header = decodeHeader(data);
-  
   if (header.size !== data.length) {
-    throw new Error(`${ErrorsCodes.INCORRECT_PACKET_SIZE}: Incorrect packet size ${data.length}, in header ${header.size}`)
+    throw new Error(`${errors_default.INCORRECT_PACKET_SIZE}: Incorrect packet size ${data.length}, in header ${header.size}`);
   }
-
-  if (DEFS.SCHEMES_NAMES[header.schemaIndex] === undefined) {
-    throw new ReferenceError(`${ErrorsCodes.SCHEMA_NOT_FOUND}: Invalid schema index (${header.schemaIndex}) in header, schema not found`)
+  if (defs_default.SCHEMES_NAMES[header.schemaIndex] === void 0) {
+    throw new ReferenceError(`${errors_default.SCHEMA_NOT_FOUND}: Invalid schema index (${header.schemaIndex}) in header, schema not found`);
   }
-  
-  // add schema name to header
-  header.schemaName = DEFS.SCHEMES_NAMES[header.schemaIndex];
-
+  header.schemaName = defs_default.SCHEMES_NAMES[header.schemaIndex];
   const packet = { header };
-  const decoded = decodeData(DEFS.SCHEMES[packet.header.schemaIndex], data);
-  
-  // automatic protocol update
-  if (
-    DEFS.SCHEMES_NAMES[header.schemaIndex] === 'PROTO'
-    && !DEFS.IS_LOCKED
-    && decoded.data.VERSION > DEFS.VERSION
-  ) {
+  const decoded = decodeData(defs_default.SCHEMES[packet.header.schemaIndex], data);
+  if (defs_default.SCHEMES_NAMES[header.schemaIndex] === "PROTO" && !defs_default.IS_LOCKED && decoded.data.VERSION > defs_default.VERSION) {
     update(decoded.data);
   }
-
-  // add data
-  if (header.schemaName === 'RPC') {
-    if (DEFS.RPC[decoded.data.method] !== decoded.data.packet.schema) {
-      throw new Error(`${ErrorsCodes.INVALID_RPC_INPUT_DATA}: Incorrect schema for RPC method "${decoded.data.method}"`)
+  if (header.schemaName === "RPC") {
+    if (defs_default.RPC[decoded.data.method] !== decoded.data.packet.schema) {
+      throw new Error(`${errors_default.INVALID_RPC_INPUT_DATA}: Incorrect schema for RPC method "${decoded.data.method}"`);
     }
     packet.header.method = decoded.data.method;
-    packet.data = decoded.data.packet.packet; 
+    packet.data = decoded.data.packet.packet;
   } else {
     packet.data = decoded.data;
   }
-  
-  return packet
+  return packet;
 }
-
-/**
- * @param {Uint8Array} data - Data to decoding
- */
 function decodeHeader(data) {
-  if (data.length < DEFS.HEADER_SIZE) {
-    return new ReferenceError(`${ErrorsCodes.INCORRECT_PACKET_SIZE}: Incorrect header size (${DEFS.HEADER_SIZE})`)
+  if (data.length < defs_default.HEADER_SIZE) {
+    return new ReferenceError(`${errors_default.INCORRECT_PACKET_SIZE}: Incorrect header size (${defs_default.HEADER_SIZE})`);
   }
   let view = new DataView(data.buffer);
   try {
@@ -359,163 +277,142 @@ function decodeHeader(data) {
       schemaIndex: view.getInt16(0),
       packetIndex: view.getInt16(2),
       version: view.getInt16(4),
-      size: view.getInt32(6),
-    }
+      size: view.getInt32(6)
+    };
   } catch (err) {
-    return new ReferenceError(`${ErrorsCodes.INVALID_HEADER}: Invalid header`)
+    return new ReferenceError(`${errors_default.INVALID_HEADER}: Invalid header`);
   }
 }
-
-/**
- * @param {Array} schema - Schema name
- * @param {Uint8Array} binaryData - Data to decoding
- */
 function decodeData(schema, binaryData, start) {
-  if (binaryData === undefined) {
-    return [{}]
+  if (binaryData === void 0) {
+    return [{}];
   }
-
   let result = {};
-  let offset = start || DEFS.HEADER_SIZE;
+  let offset = start || defs_default.HEADER_SIZE;
   let fieldData;
   for (let i = 0; i < schema.length; i++) {
     fieldData = decodeDataField(schema[i], binaryData, offset);
-    if (fieldData[0] !== undefined) {
+    if (fieldData[0] !== void 0) {
       result[schema[i].name] = fieldData[0];
     }
     offset = fieldData[1];
   }
-  return { data: result, offset: offset }
+  return { data: result, offset };
 }
-
 function decodeDataField(field, binaryData, offset) {
   try {
-    // if optional field check filled (1 byte) 1 - filled, 0 - skip
     if (field.optional) {
-      let unpacked = unpack(binaryData.buffer, DEFS.TYPES.INT8, offset);
+      let unpacked = unpack(binaryData.buffer, defs_default.TYPES.INT8, offset);
       if (unpacked === 0) {
-        // skeep field
         offset += 1;
-        return [undefined, offset]
+        return [void 0, offset];
       }
       offset += 1;
     }
-
     let result;
     let size;
     switch (field.type) {
-      case 'BOOL':
-      case 'UINT8':
-      case 'UINT16':
-      case 'UINT32':
-      case 'INT8':
-      case 'INT16':
-      case 'INT32':
-      case 'INT64':
-      case 'DATE':
-      case 'FLOAT':
-      case 'ENUM':
-        result = unpack(binaryData.buffer, DEFS.TYPES[field.type], offset);
-        offset += parseInt(DEFS.TYPES[field.type].bits / 8);
-        // convert to bool
-        if (field.type === 'BOOL') {
+      case "BOOL":
+      case "UINT8":
+      case "UINT16":
+      case "UINT32":
+      case "INT8":
+      case "INT16":
+      case "INT32":
+      case "INT64":
+      case "DATE":
+      case "FLOAT":
+      case "ENUM":
+        result = unpack(binaryData.buffer, defs_default.TYPES[field.type], offset);
+        offset += parseInt(defs_default.TYPES[field.type].bits / 8);
+        if (field.type === "BOOL") {
           result = result !== 0;
         }
-        // enum
-        if (field.type === 'ENUM') {
-          if (field.list[result] === undefined) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Invalid ENUM value "${result}" for field "${field.name}", list: ${field.list.join(', ')}`)
+        if (field.type === "ENUM") {
+          if (field.list[result] === void 0) {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_VALUE}: Invalid ENUM value "${result}" for field "${field.name}", list: ${field.list.join(", ")}`);
           }
           result = field.list[result];
         }
-        break
-      case 'BINARY':
-        size = unpack(binaryData.buffer, DEFS.TYPES.UINT32, offset);
-        offset += DEFS.SIZE_SIZE;
+        break;
+      case "BINARY":
+        size = unpack(binaryData.buffer, defs_default.TYPES.UINT32, offset);
+        offset += defs_default.SIZE_SIZE;
         result = Array.from(new Uint8Array(binaryData.subarray(offset, offset + size)));
         offset += size;
-        break
-      case 'ARRAY':
-        size = unpack(binaryData.buffer, DEFS.TYPES.UINT32, offset);
-        offset += DEFS.SIZE_SIZE;
+        break;
+      case "ARRAY":
+        size = unpack(binaryData.buffer, defs_default.TYPES.UINT32, offset);
+        offset += defs_default.SIZE_SIZE;
         result = [];
         let arrayItem;
         for (let i = 0; i < size; i++) {
-          if (field.items.type === 'ARRAY' && field.items.items !== undefined && field.items.items.type !== undefined) {
-            let arraySize = unpack(binaryData.buffer, DEFS.TYPES.UINT32, offset);
-            offset += DEFS.SIZE_SIZE;
-
+          if (field.items.type === "ARRAY" && field.items.items !== void 0 && field.items.items.type !== void 0) {
+            let arraySize = unpack(binaryData.buffer, defs_default.TYPES.UINT32, offset);
+            offset += defs_default.SIZE_SIZE;
             let resultInArray = [];
             for (let j = 0; j < arraySize; j++) {
               let fieldDefinition = {
-                name: DEFS.TEMP_NAME,
+                name: defs_default.TEMP_NAME,
                 type: field.items.items.type
               };
-
-              DEFS.SCHEMES[DEFS.INDEX.SCHEMA].forEach(f => {
-                if (f.name !== 'name' && f.name !== 'type') {
+              defs_default.SCHEMES[defs_default.INDEX.SCHEMA].forEach((f) => {
+                if (f.name !== "name" && f.name !== "type") {
                   if (field.items.items[f.name]) {
                     fieldDefinition[f.name] = field.items.items[f.name];
                   }
                 }
               });
-
               arrayItem = decodeDataField(fieldDefinition, binaryData, offset);
               resultInArray.push(arrayItem[0]);
               offset = arrayItem[1];
             }
             result.push(resultInArray);
           } else {
-
             let fieldDefinition = {
-              name: DEFS.TEMP_NAME,
+              name: defs_default.TEMP_NAME,
               type: field.items.type
             };
-
-            DEFS.SCHEMES[DEFS.INDEX.SCHEMA].forEach(f => {
-              if (f.name !== 'name' && f.name !== 'type') {
+            defs_default.SCHEMES[defs_default.INDEX.SCHEMA].forEach((f) => {
+              if (f.name !== "name" && f.name !== "type") {
                 if (field.items[f.name]) {
                   fieldDefinition[f.name] = field.items[f.name];
                 }
               }
             });
-
             arrayItem = decodeDataField(fieldDefinition, binaryData, offset);
             result.push(arrayItem[0]);
             offset = arrayItem[1];
           }
         }
-        break
-      case 'STRING':
-      case 'JSON':
-        size = unpack(binaryData.buffer, DEFS.TYPES.UINT32, offset);
-        offset += DEFS.SIZE_SIZE;
+        break;
+      case "STRING":
+      case "JSON":
+        size = unpack(binaryData.buffer, defs_default.TYPES.UINT32, offset);
+        offset += defs_default.SIZE_SIZE;
         result = unpackString(binaryData.subarray(offset, offset + size));
         offset += size;
-
-        // decode json
-        if (field.type === 'JSON') {
+        if (field.type === "JSON") {
           try {
             result = JSON.parse(result);
           } catch (err) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Invalid JSON in field "${field.name}"`)
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_VALUE}: Invalid JSON in field "${field.name}"`);
           }
         }
-        break
-      case 'SCHEMA':
-      case 'PACKET':
-        let schemaIndex = DEFS.INDEX[field.schema];
-        // decode schemaIndex for PACKET only
-        if (field.type === 'PACKET') {
-          schemaIndex = unpack(binaryData.buffer, DEFS.TYPES.UINT16, offset);
+        break;
+      case "SCHEMA":
+      case "PACKET":
+        let schemaIndex = defs_default.INDEX[field.schema];
+        if (field.type === "PACKET") {
+          schemaIndex = unpack(binaryData.buffer, defs_default.TYPES.UINT16, offset);
           offset += 2;
         }
-        if (DEFS.SCHEMES[schemaIndex] === undefined) {
-          throw new ReferenceError(`${ErrorsCodes.SCHEMA_NOT_FOUND}: Invalid schemaIndex "${schemaIndex}", schema not found`) 
+        if (defs_default.SCHEMES[schemaIndex] === void 0) {
+          throw new ReferenceError(`${errors_default.SCHEMA_NOT_FOUND}: Invalid schemaIndex "${schemaIndex}", schema not found`);
         }
-        const schemaName = DEFS.SCHEMES_NAMES[schemaIndex];
-        let schemaData = decodeData(DEFS.SCHEMES[schemaIndex], binaryData, offset);
-        if (field.type === 'PACKET') {
+        const schemaName = defs_default.SCHEMES_NAMES[schemaIndex];
+        let schemaData = decodeData(defs_default.SCHEMES[schemaIndex], binaryData, offset);
+        if (field.type === "PACKET") {
           result = {
             schema: schemaName,
             packet: schemaData.data
@@ -524,62 +421,44 @@ function decodeDataField(field, binaryData, offset) {
           result = schemaData.data;
         }
         offset = schemaData.offset;
-        break
+        break;
       default:
-        throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA}: Undefinned field type "${field.type}"`)
+        throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA}: Undefinned field type "${field.type}"`);
     }
-    return [result, offset]
+    return [result, offset];
   } catch (err) {
-    throw new Error(`${ErrorsCodes.UNPACK_ERROR}: Field "${field.name}" decoding error ${err.message}`)
+    throw new Error(`${errors_default.UNPACK_ERROR}: Field "${field.name}" decoding error ${err.message}`);
   }
 }
 
-let packetIndex = 0;
-
-/**
- * @param {string} schema - Schema name, default: PROTO
- * @param {object} data - Data to encoding, default: protocol definitions
- * @returns {Uint8Array}
- */
-function encode(schema = 'PROTO', data) {
-  if (schema === 'PROTO') {
-    data = data || DEFS;
+// src/encode.js
+var packetIndex = 0;
+function encode(schema = "PROTO", data) {
+  if (schema === "PROTO") {
+    data = data || defs_default;
   }
-
-  // check schema name
-  const schemaIndex = DEFS.SCHEMES_NAMES.indexOf(schema);
+  const schemaIndex = defs_default.SCHEMES_NAMES.indexOf(schema);
   if (schemaIndex < 0) {
-    throw new ReferenceError(`${ErrorsCodes.SCHEMA_NOT_FOUND}: Schema "${schema}" not found`)
+    throw new ReferenceError(`${errors_default.SCHEMA_NOT_FOUND}: Schema "${schema}" not found`);
   }
-
   packetIndex++;
   if (packetIndex > 55555) {
     packetIndex = 0;
   }
-
-  // PING {schemaIndex: 0}
-  // PONG {schemaIndex: 1}
   if (schemaIndex < 2) {
-    // check packetIndex for PONG
-    if (schemaIndex === 1 && (data === undefined || data.packetIndex === undefined || !Number.isInteger(data.packetIndex))) {
-      throw new ReferenceError(`${ErrorsCodes.EMPTY_REQUIRED_FIELD}: Field "packetIndex" must be filled (UINT16)`)
+    if (schemaIndex === 1 && (data === void 0 || data.packetIndex === void 0 || !Number.isInteger(data.packetIndex))) {
+      throw new ReferenceError(`${errors_default.EMPTY_REQUIRED_FIELD}: Field "packetIndex" must be filled (UINT16)`);
     }
-    
-    // build packet
-    let packet = new ArrayBuffer(4);
-    let view = new DataView(packet);
-    view.setInt16(0, schemaIndex);
-    view.setInt16(2, schemaIndex === 0 ? packetIndex : data.packetIndex);
-    return packet
+    let packet2 = new ArrayBuffer(4);
+    let view2 = new DataView(packet2);
+    view2.setInt16(0, schemaIndex);
+    view2.setInt16(2, schemaIndex === 0 ? packetIndex : data.packetIndex);
+    return packet2;
   }
-
-  // missing or empty data
-  if (data === undefined) {
+  if (data === void 0) {
     data = {};
   }
-
-  // encode data
-  const encoded = encodeData(DEFS.SCHEMES[schemaIndex], data);
+  const encoded = encodeData(defs_default.SCHEMES[schemaIndex], data);
   let totalLength = 0;
   for (let i = 0; i < encoded.length; i++) {
     totalLength += encoded[i].byteLength;
@@ -590,240 +469,195 @@ function encode(schema = 'PROTO', data) {
     encodedData.set(new Uint8Array(encoded[i]), offset);
     offset += encoded[i].byteLength;
   }
-
-  // crate packet
-  const size = DEFS.HEADER_SIZE + encodedData.length;
+  const size = defs_default.HEADER_SIZE + encodedData.length;
   const packet = new Uint8Array(size);
-  
-  // add data to packet
-  packet.set(encodedData, DEFS.HEADER_SIZE);
+  packet.set(encodedData, defs_default.HEADER_SIZE);
   let view = new DataView(packet.buffer);
-  
-  // add header to packet
   view.setInt16(0, schemaIndex);
   view.setInt16(2, packetIndex);
-  view.setInt16(4, DEFS.VERSION);
+  view.setInt16(4, defs_default.VERSION);
   view.setInt32(6, size);
-  return packet
+  return packet;
 }
-
-/**
- * @param {string} schema - Schema name
- * @param {object} data - Data to encoding
- */
 function encodeData(schema, data) {
   if (!Array.isArray(schema)) {
-    throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA}: Invalid schema data`)
+    throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA}: Invalid schema data`);
   }
   let result = [];
   for (let i = 0; i < schema.length; i++) {
     result = result.concat(encodeDataField(schema[i], data));
   }
-  return result
+  return result;
 }
-
-/**
- * Encode data field
- * @param {object} field 
- * @param {any} data
- * @returns 
- */
 function encodeDataField(field, data) {
   let result = [];
   let str;
   let size;
   let filled;
   let fieldData = data[field.name];
-  
-  // incorrect data value
   if (fieldData === null || Number.isNaN(fieldData)) {
-    fieldData = undefined;
+    fieldData = void 0;
   }
-
   try {
-    filled = fieldData !== undefined;
+    filled = fieldData !== void 0;
     if (field.optional) {
-      result = result.concat(pack(filled ? 1 : 0, DEFS.TYPES.INT8));
-
-      // if null and optional
+      result = result.concat(pack(filled ? 1 : 0, defs_default.TYPES.INT8));
       if (fieldData === null) {
-        return result
+        return result;
       }
     }
     if (filled) {
       switch (field.type) {
-        case 'BOOL':
-          if (typeof (fieldData) !== 'boolean') {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type (${field.type})`)
+        case "BOOL":
+          if (typeof fieldData !== "boolean") {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type (${field.type})`);
           }
-          result = result.concat(pack(fieldData === false ? 0 : 1, DEFS.TYPES.BOOL));
-          break
-        case 'UINT8':
-        case 'UINT16':
-        case 'UINT32':
-        case 'INT8':
-        case 'INT16':
-        case 'INT32':
-        case 'INT64':
-        case 'DATE':
-          if (typeof (fieldData) !== 'number' || !isFinite(fieldData) || Math.floor(fieldData) !== fieldData) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`)
+          result = result.concat(pack(fieldData === false ? 0 : 1, defs_default.TYPES.BOOL));
+          break;
+        case "UINT8":
+        case "UINT16":
+        case "UINT32":
+        case "INT8":
+        case "INT16":
+        case "INT32":
+        case "INT64":
+        case "DATE":
+          if (typeof fieldData !== "number" || !isFinite(fieldData) || Math.floor(fieldData) !== fieldData) {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`);
           }
-          result = result.concat(pack(fieldData, DEFS.TYPES[field.type]));
-          break
-        case 'FLOAT':
+          result = result.concat(pack(fieldData, defs_default.TYPES[field.type]));
+          break;
+        case "FLOAT":
           if (isNaN(fieldData)) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`)
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`);
           }
-          result = result.concat(pack(fieldData, DEFS.TYPES[field.type]));
-          break
-        case 'ENUM':
-          if (field.list !== undefined && Array.isArray(field.list) && field.list.indexOf(fieldData) > -1) {
-            result = result.concat(pack(field.list.indexOf(fieldData), DEFS.TYPES.UINT16));
+          result = result.concat(pack(fieldData, defs_default.TYPES[field.type]));
+          break;
+        case "ENUM":
+          if (field.list !== void 0 && Array.isArray(field.list) && field.list.indexOf(fieldData) > -1) {
+            result = result.concat(pack(field.list.indexOf(fieldData), defs_default.TYPES.UINT16));
           } else {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Invalid ENUM value "${fieldData}" for field "${field.name}", list: ${field.list.join(', ')}`)
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_VALUE}: Invalid ENUM value "${fieldData}" for field "${field.name}", list: ${field.list.join(", ")}`);
           }
-          break
-        case 'BINARY':
-          if (typeof (fieldData) !== 'object') {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`)
+          break;
+        case "BINARY":
+          if (typeof fieldData !== "object") {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`);
           }
-          if (fieldData.byteLength > DEFS.MAX_UINT32) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Invalid data length, max ${DEFS.MAX_UINT32}`)
+          if (fieldData.byteLength > defs_default.MAX_UINT32) {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_VALUE}: Invalid data length, max ${defs_default.MAX_UINT32}`);
           }
-          size = pack(fieldData.byteLength, DEFS.TYPES.UINT32);
+          size = pack(fieldData.byteLength, defs_default.TYPES.UINT32);
           result = result.concat(size).concat(fieldData.buffer);
-          break
-        case 'ARRAY':
-          if (field.items === undefined || field.items.type === undefined || fieldData === undefined || !Array.isArray(fieldData)) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`)
+          break;
+        case "ARRAY":
+          if (field.items === void 0 || field.items.type === void 0 || fieldData === void 0 || !Array.isArray(fieldData)) {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type "${field.type}" for field "${field.name}"`);
           }
-          size = pack(fieldData.length, DEFS.TYPES.UINT32);
+          size = pack(fieldData.length, defs_default.TYPES.UINT32);
           result = result.concat(size);
           for (let i = 0; i < fieldData.length; i++) {
-            if (field.items.type === 'ARRAY') {
-              size = pack(fieldData[i].length, DEFS.TYPES.UINT32);
+            if (field.items.type === "ARRAY") {
+              size = pack(fieldData[i].length, defs_default.TYPES.UINT32);
               result = result.concat(size);
               let fieldValue = {};
               for (let j = 0; j < fieldData[i].length; j++) {
-                fieldValue[DEFS.TEMP_NAME] = fieldData[i][j];
-
+                fieldValue[defs_default.TEMP_NAME] = fieldData[i][j];
                 let fieldDefinition = {
-                  name: DEFS.TEMP_NAME,
+                  name: defs_default.TEMP_NAME,
                   type: field.items.items.type
                 };
-
-                DEFS.SCHEMES[DEFS.INDEX.SCHEMA].forEach(f => {
-                  if (f.name !== 'name' && f.name !== 'type') {
+                defs_default.SCHEMES[defs_default.INDEX.SCHEMA].forEach((f) => {
+                  if (f.name !== "name" && f.name !== "type") {
                     if (field.items.items[f.name]) {
                       fieldDefinition[f.name] = field.items.items[f.name];
                     }
                   }
                 });
-
                 result = result.concat(encodeDataField(fieldDefinition, fieldValue));
               }
             } else {
               let fieldValue = {};
-              fieldValue[DEFS.TEMP_NAME] = fieldData[i];
-
+              fieldValue[defs_default.TEMP_NAME] = fieldData[i];
               let fieldDefinition = {
-                name: DEFS.TEMP_NAME,
+                name: defs_default.TEMP_NAME,
                 type: field.items.type
               };
-
-              DEFS.SCHEMES[DEFS.INDEX.SCHEMA].forEach(f => {
-                if (f.name !== 'name' && f.name !== 'type') {
+              defs_default.SCHEMES[defs_default.INDEX.SCHEMA].forEach((f) => {
+                if (f.name !== "name" && f.name !== "type") {
                   if (field.items[f.name]) {
                     fieldDefinition[f.name] = field.items[f.name];
                   }
                 }
               });
-
               result = result.concat(encodeDataField(fieldDefinition, fieldValue));
             }
           }
-          break
-        case 'STRING':
-        case 'JSON':
-          if (
-            (field.type === 'JSON' && typeof (fieldData) !== 'object')
-            || (field.type === 'STRING' && typeof (fieldData) !== 'string')
-          ) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type (${field.type}) for field "${field.name}"`)
+          break;
+        case "STRING":
+        case "JSON":
+          if (field.type === "JSON" && typeof fieldData !== "object" || field.type === "STRING" && typeof fieldData !== "string") {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type (${field.type}) for field "${field.name}"`);
           }
-          str = packString(field.type === 'JSON' ? JSON.stringify(fieldData) : fieldData);
-          if (str.byteLength > DEFS.MAX_UINT32) {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE}: Invalid data length, max ${DEFS.MAX_UINT32}`)
+          str = packString(field.type === "JSON" ? JSON.stringify(fieldData) : fieldData);
+          if (str.byteLength > defs_default.MAX_UINT32) {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_VALUE}: Invalid data length, max ${defs_default.MAX_UINT32}`);
           }
-          size = pack(str.byteLength, DEFS.TYPES.UINT32);
+          size = pack(str.byteLength, defs_default.TYPES.UINT32);
           result = result.concat(size).concat(str);
-          break
-        case 'SCHEMA':
-        case 'PACKET':
-          if (typeof (fieldData) !== 'object') {
-            throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA_TYPE}: Invalid data type (${field.type}) for field "${field.name}"`)
+          break;
+        case "SCHEMA":
+        case "PACKET":
+          if (typeof fieldData !== "object") {
+            throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA_TYPE}: Invalid data type (${field.type}) for field "${field.name}"`);
           }
-
-          const schemaIndex = DEFS.INDEX[field.type === 'SCHEMA' ? field.schema : fieldData.schema];
-          if (schemaIndex === undefined) {
-            throw new ReferenceError(`${ErrorsCodes.SCHEMA_NOT_FOUND}: Schema "${fieldData.schema}" not found`)
+          const schemaIndex = defs_default.INDEX[field.type === "SCHEMA" ? field.schema : fieldData.schema];
+          if (schemaIndex === void 0) {
+            throw new ReferenceError(`${errors_default.SCHEMA_NOT_FOUND}: Schema "${fieldData.schema}" not found`);
           }
-
-          // write schemaIndex for PACKET only
-          if (field.type === 'PACKET') {
-            result = result.concat(pack(schemaIndex, DEFS.TYPES.UINT16));
+          if (field.type === "PACKET") {
+            result = result.concat(pack(schemaIndex, defs_default.TYPES.UINT16));
           }
-
-          const schemaData = field.type === 'SCHEMA' ? data[field.name] : fieldData.data;
-
-          result = result.concat(encodeData(DEFS.SCHEMES[schemaIndex], schemaData));
-          break
+          const schemaData = field.type === "SCHEMA" ? data[field.name] : fieldData.data;
+          result = result.concat(encodeData(defs_default.SCHEMES[schemaIndex], schemaData));
+          break;
         default:
-          throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA}: Undefinned field type "${field.type}"`)
+          throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA}: Undefinned field type "${field.type}"`);
       }
     } else if (!field.optional) {
-      throw new ReferenceError(`${ErrorsCodes.EMPTY_REQUIRED_FIELD}: Field "${field.name}" is required and must be filled`)
+      throw new ReferenceError(`${errors_default.EMPTY_REQUIRED_FIELD}: Field "${field.name}" is required and must be filled`);
     }
   } catch (err) {
-    throw new Error(`${ErrorsCodes.PACK_ERROR}: Field "${field.name}" encoding error ${err.message}`)
+    throw new Error(`${errors_default.PACK_ERROR}: Field "${field.name}" encoding error ${err.message}`);
   }
-
-  return result
+  return result;
 }
 
-/**
- * @param {string} method - RPC method name
- * @param {string} schema - Schema name
- * @returns {Uint8Array}
- */
+// src/rpc.js
 function registerRPC(method, schema) {
-  if (DEFS.RPC[method] !== undefined) {
-    throw new Error(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE} RPC method "${method}" already in use`)
+  if (defs_default.RPC[method] !== void 0) {
+    throw new Error(`${errors_default.INVALID_INPUT_DATA_VALUE} RPC method "${method}" already in use`);
   }
-
-  if (DEFS.INDEX[schema] === undefined) {
-    throw new Error(`${ErrorsCodes.SCHEMA_NOT_FOUND} Schema "${schema}" not found`)
+  if (defs_default.INDEX[schema] === void 0) {
+    throw new Error(`${errors_default.SCHEMA_NOT_FOUND} Schema "${schema}" not found`);
   }
-
-  DEFS.RPC[method] = schema;
+  defs_default.RPC[method] = schema;
 }
-
 function encodeRPC(method, data) {
-  if (DEFS.RPC[method] === undefined) {
-    throw new Error(`${ErrorsCodes.INVALID_INPUT_DATA_VALUE} RPC method "${method}" not found`)
+  if (defs_default.RPC[method] === void 0) {
+    throw new Error(`${errors_default.INVALID_INPUT_DATA_VALUE} RPC method "${method}" not found`);
   }
-
-  return encode('RPC', {
-    method: method,
+  return encode("RPC", {
+    method,
     packet: {
-      schema: DEFS.RPC[method],
-      data,
+      schema: defs_default.RPC[method],
+      data
     }
-  })
+  });
 }
 
-var main = {
+// src/main.js
+var main_default = {
   encode,
   decode,
   addSchema,
@@ -832,7 +666,8 @@ var main = {
   encodeRPC,
   setLock,
   setVersion,
-  getVersion,
+  getVersion
 };
-
-export { main as default };
+export {
+  main_default as default
+};
