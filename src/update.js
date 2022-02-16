@@ -86,9 +86,10 @@ function getInfo() {
   return DEFS
 }
 
-/**
- * @param {bool} isLocked 
- */
+ export function getLock(isLocked) {
+  return DEFS.IS_LOCKED
+}
+
 export function setLock(isLocked) {
   DEFS.IS_LOCKED = !!isLocked
 }

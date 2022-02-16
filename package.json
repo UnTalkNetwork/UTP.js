@@ -1,6 +1,6 @@
 {
   "name": "utp.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Universal Typed Protocol for Node.js and Browsers",
   "author": {
     "name": "F1int",
@@ -31,7 +31,7 @@
   ],
   "homepage": "https://github.com/UnTalkNetwork/UTP.js/",
   "engines": {
-    "node": ">= 10"
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
   },
   "main": "index.js",
   "type": "module",

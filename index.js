@@ -43,8 +43,8 @@ var DEFS = {
     DEFS.SCHEMES_NAMES.forEach((value, index) => DEFS.INDEX[value] = index);
   }
 };
-for (let TYPE in DEFS.TYPES) {
-  DEFS.TYPES_NAMES.push(TYPE);
+for (let TYPE2 in DEFS.TYPES) {
+  DEFS.TYPES_NAMES.push(TYPE2);
 }
 DEFS.compile();
 DEFS.SCHEMES[DEFS.INDEX.PING] = DEFS.SCHEMES[DEFS.INDEX.PONG] = DEFS.SCHEMES[DEFS.INDEX.HELLO] = [];
@@ -657,7 +657,27 @@ function encodeRPC(method, data) {
 }
 
 // src/main.js
+var TYPE = {
+  BOOL: "BOOL",
+  UINT8: "UINT8",
+  INT8: "INT8",
+  UINT16: "UINT16",
+  INT16: "INT16",
+  UINT32: "UINT32",
+  INT32: "INT32",
+  INT64: "INT64",
+  FLOAT: "FLOAT",
+  DATE: "DATE",
+  ENUM: "ENUM",
+  BINARY: "BINARY",
+  STRING: "STRING",
+  ARRAY: "ARRAY",
+  JSON: "JSON",
+  SCHEMA: "SCHEMA",
+  PACKET: "PACKET"
+};
 var main_default = {
+  TYPE,
   encode,
   decode,
   addSchema,

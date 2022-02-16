@@ -2,27 +2,27 @@ import UTP from '../index.js'
 
 test('Custom schema', () => {
   UTP.addSchema('TYPES_TEST', [
-    { name: 'bool', type: 'BOOL' },
-    { name: 'int8', type: 'INT8' },
-    { name: 'int16', type: 'INT16' },
-    { name: 'int32', type: 'INT32' },
-    { name: 'uint8', type: 'UINT8' },
-    { name: 'uint16', type: 'UINT16' },
-    { name: 'uint32', type: 'UINT32' },
-    { name: 'int64', type: 'INT64' },
-    { name: 'int642', type: 'INT64' },
-    { name: 'float64', type: 'FLOAT' },
-    { name: 'date', type: 'DATE' },
-    { name: 'dateMax', type: 'DATE' },
-    { name: 'optionalDate', type: 'DATE', optional: true },
-    { name: 'string', type: 'STRING' },
-    { name: 'optionalString', type: 'STRING', optional: true },
-    { name: 'nestedArray', type: 'ARRAY', items: { type: 'ARRAY', items: { type: 'SCHEMA', schema: 'ERROR' } } },
-    { name: 'customObject', type: 'SCHEMA', schema: 'ERROR' },
-    { name: 'arrayOfObjects', type: 'ARRAY', items: { type: 'SCHEMA', schema: 'ERROR' } },
-    { name: 'enum', type: 'ENUM', list: ['enum1', 'enum2', 'enum3'], optional: true },
-    { name: 'arrayOfInt', type: 'ARRAY', items: { type: 'INT8' } },
-    { name: 'JSON', type: 'JSON' }
+    { name: 'bool', type: UTP.TYPE.BOOL },
+    { name: 'int8', type: UTP.TYPE.INT8 },
+    { name: 'int16', type: UTP.TYPE.INT16 },
+    { name: 'int32', type: UTP.TYPE.INT32 },
+    { name: 'uint8', type: UTP.TYPE.UINT8 },
+    { name: 'uint16', type: UTP.TYPE.UINT16 },
+    { name: 'uint32', type: UTP.TYPE.UINT32 },
+    { name: 'int64', type: UTP.TYPE.INT64 },
+    { name: 'int642', type: UTP.TYPE.INT64 },
+    { name: 'float64', type: UTP.TYPE.FLOAT },
+    { name: 'date', type: UTP.TYPE.DATE },
+    { name: 'dateMax', type: UTP.TYPE.DATE },
+    { name: 'optionalDate', type: UTP.TYPE.DATE, optional: true },
+    { name: 'string', type: UTP.TYPE.STRING },
+    { name: 'optionalString', type: UTP.TYPE.STRING, optional: true },
+    { name: 'nestedArray', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.SCHEMA, schema: 'ERROR' } } },
+    { name: 'customObject', type: UTP.TYPE.SCHEMA, schema: 'ERROR' },
+    { name: 'arrayOfObjects', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.SCHEMA, schema: 'ERROR' } },
+    { name: 'enum', type: UTP.TYPE.ENUM, list: ['enum1', 'enum2', 'enum3'], optional: true },
+    { name: 'arrayOfInt', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.INT8 } },
+    { name: 'JSON', type: UTP.TYPE.JSON }
   ])
 
   const data = {

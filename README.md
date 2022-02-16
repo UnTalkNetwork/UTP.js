@@ -24,11 +24,11 @@ yarn add utp.js
 import UTP from 'utp.js'
 
 UTP.addSchema('MY_DATA', [
-  { name: 'id', type: 'UINT32' },
-  { name: 'name', type: 'STRING' },
-  { name: 'type', type: 'ENUM', list: ['ONE', 'TWO', 'TREE'] },
-  { name: 'rights', type: 'ARRAY', items: { type: 'UINT8' } },
-  { name: 'active', type: 'BOOL' }
+  { name: 'id', type: UTP.TYPE.UINT32 },
+  { name: 'name', type: UTP.TYPE.STRING },
+  { name: 'type', type: UTP.TYPE.ENUM, list: ['ONE', 'TWO', 'THREE'] },
+  { name: 'rights', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.UINT8 } },
+  { name: 'active', type: UTP.TYPE.BOOL }
 ])
 
 ```
@@ -75,7 +75,7 @@ console.log('Decoded data', packet.data)
 
 ```js
 UTP.addSchema('AUTH_SIGNIN', [
-  { name: 'email', type: 'STRING' }
+  { name: 'email', type: UTP.TYPE.STRING }
 ])
 
 UTP.registerRPC('auth.getCode', 'AUTH_SIGNIN')
@@ -139,49 +139,49 @@ UTP.getVersion() // 10000
 ### ERROR
 ```js
 [
-  { name: 'code', type: 'UINT16' },
-  { name: 'text', type: 'STRING' }
+  { name: 'code', type: UTP.TYPE.UINT16 },
+  { name: 'text', type: UTP.TYPE.STRING }
 ]
 ```
 
 ### PROTO
 ```js
 [
-  { name: 'VERSION', type: 'UINT32' },
-  { name: 'TYPES', type: 'JSON' },
-  { name: 'SCHEMES_NAMES', type: 'ARRAY', items: { type: 'STRING' } },
-  { name: 'SCHEMES', type: 'ARRAY', items: { type: 'ARRAY', items: { type: 'SCHEMA', schema: 'SCHEMA' } } }
+  { name: 'VERSION', type: UTP.TYPE.UINT32 },
+  { name: 'TYPES', type: UTP.TYPE.JSON },
+  { name: 'SCHEMES_NAMES', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.STRING } },
+  { name: 'SCHEMES', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.SCHEMA, schema: 'SCHEMA' } } }
 ]
 ```
 
 ### SCHEMA
 ```js
 [
-  { name: 'name', type: 'STRING' },
-  { name: 'type', type: 'ENUM', list: DEFS.TYPES_NAMES },
-  { name: 'items', type: 'SCHEMA', schema: 'SCHEMA_ITEMS', optional: true },
-  { name: 'schema', type: 'STRING', optional: true },
-  { name: 'list', type: 'ARRAY', items: { type: 'STRING' }, optional: true },
-  { name: 'maxlength', type: 'INT32', optional: true },
-  { name: 'optional', type: 'BOOL', optional: true }
+  { name: 'name', type: UTP.TYPE.STRING },
+  { name: 'type', type: UTP.TYPE.ENUM, list: DEFS.TYPES_NAMES },
+  { name: 'items', type: UTP.TYPE.SCHEMA, schema: 'SCHEMA_ITEMS', optional: true },
+  { name: 'schema', type: UTP.TYPE.STRING, optional: true },
+  { name: 'list', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.STRING }, optional: true },
+  { name: 'maxlength', type: UTP.TYPE.INT32, optional: true },
+  { name: 'optional', type: UTP.TYPE.BOOL, optional: true }
 ]
 ```
 
 ### SCHEMA_ITEMS
 ```js
 [
-  { name: 'type', type: 'ENUM', list: DEFS.TYPES_NAMES },
-  { name: 'schema', type: 'STRING', optional: true },
-  { name: 'items', type: 'SCHEMA', schema: 'SCHEMA_ITEMS', optional: true },
-  { name: 'list', type: 'ARRAY', items: { type: 'STRING' }, optional: true }
+  { name: 'type', type: UTP.TYPE.ENUM, list: DEFS.TYPES_NAMES },
+  { name: 'schema', type: UTP.TYPE.STRING, optional: true },
+  { name: 'items', type: UTP.TYPE.SCHEMA, schema: 'SCHEMA_ITEMS', optional: true },
+  { name: 'list', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.STRING }, optional: true }
 ]
 ```
 
 ### RPC
 ```js
 [
-  { name: 'method', type: 'STRING' },
-  { name: 'packet', type: 'PACKET', optional: true }
+  { name: 'method', type: UTP.TYPE.STRING },
+  { name: 'packet', type: UTP.TYPE.PACKET, optional: true }
 ]
 ```
 
