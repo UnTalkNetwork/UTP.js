@@ -146,8 +146,8 @@ function pack(value, options) {
   }
   throw new Error("Incompatible options");
 }
-function unpack(buffer, options, offset) {
-  const view = new DataView(buffer, offset || 0);
+function unpack(buffer, options, offset = 0) {
+  const view = new DataView(buffer, offset);
   if (options.float) {
     if (![32, 64].includes(options.bits)) {
       throw new Error("Incorrect bits for value (float)");
@@ -233,12 +233,13 @@ function decode(data) {
   if (data === void 0 || typeof data !== "object") {
     throw new ReferenceError(`${errors_default.INVALID_INPUT_DATA}: Data is missing or not object`);
   }
-  if (data.length === 4) {
-    const schemaIndex = unpack(data.buffer, defs_default.TYPES.INT16);
+  if (data.byteLength === 4) {
+    const buffer = new Uint8Array(data);
+    const schemaIndex = unpack(buffer.buffer, defs_default.TYPES.UINT16);
     return {
       header: {
         schemaIndex,
-        packetIndex: unpack(data.buffer, defs_default.TYPES.INT16, 2),
+        packetIndex: unpack(buffer.buffer, defs_default.TYPES.UINT16, 2),
         schemaName: defs_default.SCHEMES_NAMES[schemaIndex]
       }
     };
@@ -274,10 +275,10 @@ function decodeHeader(data) {
   let view = new DataView(data.buffer);
   try {
     return {
-      schemaIndex: view.getInt16(0),
-      packetIndex: view.getInt16(2),
-      version: view.getInt16(4),
-      size: view.getInt32(6)
+      schemaIndex: view.getUint16(0),
+      packetIndex: view.getUint16(2),
+      version: view.getUint16(4),
+      size: view.getUint32(6)
     };
   } catch (err) {
     return new ReferenceError(`${errors_default.INVALID_HEADER}: Invalid header`);
@@ -451,8 +452,8 @@ function encode(schema = "PROTO", data) {
     }
     let packet2 = new ArrayBuffer(4);
     let view2 = new DataView(packet2);
-    view2.setInt16(0, schemaIndex);
-    view2.setInt16(2, schemaIndex === 0 ? packetIndex : data.packetIndex);
+    view2.setUint16(0, schemaIndex);
+    view2.setUint16(2, schemaIndex === 0 ? packetIndex : data.packetIndex);
     return packet2;
   }
   if (data === void 0) {
@@ -473,10 +474,10 @@ function encode(schema = "PROTO", data) {
   const packet = new Uint8Array(size);
   packet.set(encodedData, defs_default.HEADER_SIZE);
   let view = new DataView(packet.buffer);
-  view.setInt16(0, schemaIndex);
-  view.setInt16(2, packetIndex);
-  view.setInt16(4, defs_default.VERSION);
-  view.setInt32(6, size);
+  view.setUint16(0, schemaIndex);
+  view.setUint16(2, packetIndex);
+  view.setUint16(4, defs_default.VERSION);
+  view.setUint32(6, size);
   return packet;
 }
 function encodeData(schema, data) {

@@ -76,8 +76,8 @@ export function pack(value, options) {
  * @returns {number}
  * @throws {string}
  */
-export function unpack(buffer, options, offset) {
-  const view = new DataView(buffer, offset || 0)
+export function unpack(buffer, options, offset = 0) {
+  const view = new DataView(buffer, offset)
   if (options.float) {
     if (![32, 64].includes(options.bits)) {
       throw new Error('Incorrect bits for value (float)')

@@ -36,8 +36,8 @@ export function encode(schema = 'PROTO', data) {
     // build packet
     let packet = new ArrayBuffer(4)
     let view = new DataView(packet)
-    view.setInt16(0, schemaIndex)
-    view.setInt16(2, schemaIndex === 0 ? packetIndex : data.packetIndex)
+    view.setUint16(0, schemaIndex)
+    view.setUint16(2, schemaIndex === 0 ? packetIndex : data.packetIndex)
     return packet
   }
 
@@ -68,10 +68,10 @@ export function encode(schema = 'PROTO', data) {
   let view = new DataView(packet.buffer)
   
   // add header to packet
-  view.setInt16(0, schemaIndex)
-  view.setInt16(2, packetIndex)
-  view.setInt16(4, DEFS.VERSION)
-  view.setInt32(6, size)
+  view.setUint16(0, schemaIndex)
+  view.setUint16(2, packetIndex)
+  view.setUint16(4, DEFS.VERSION)
+  view.setUint32(6, size)
   return packet
 }
 

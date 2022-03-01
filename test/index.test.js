@@ -1,5 +1,11 @@
 import UTP from '../index.js'
 
+test('PING/PONG', () => {
+  const encoded = UTP.encode('PING')
+  const decoded = UTP.decode(encoded)
+  expect(decoded.header.schemaName).toEqual('PING')
+})
+
 test('Custom schema', () => {
   UTP.addSchema('TYPES_TEST', [
     { name: 'bool', type: UTP.TYPE.BOOL },

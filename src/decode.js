@@ -12,12 +12,13 @@ export function decode(data) {
     throw new ReferenceError(`${ErrorsCodes.INVALID_INPUT_DATA}: Data is missing or not object`)
   }
   // HELLO PING PONG
-  if (data.length === 4) {
-    const schemaIndex = unpack(data.buffer, DEFS.TYPES.INT16)
+  if (data.byteLength === 4) {
+    const buffer = new Uint8Array(data)
+    const schemaIndex = unpack(buffer.buffer, DEFS.TYPES.UINT16)
     return {
       header: {
         schemaIndex,
-        packetIndex: unpack(data.buffer, DEFS.TYPES.INT16, 2),
+        packetIndex: unpack(buffer.buffer, DEFS.TYPES.UINT16, 2),
         schemaName: DEFS.SCHEMES_NAMES[schemaIndex],
       }
     }
@@ -72,10 +73,10 @@ function decodeHeader(data) {
   let view = new DataView(data.buffer)
   try {
     return {
-      schemaIndex: view.getInt16(0),
-      packetIndex: view.getInt16(2),
-      version: view.getInt16(4),
-      size: view.getInt32(6),
+      schemaIndex: view.getUint16(0),
+      packetIndex: view.getUint16(2),
+      version: view.getUint16(4),
+      size: view.getUint32(6),
     }
   } catch (err) {
     return new ReferenceError(`${ErrorsCodes.INVALID_HEADER}: Invalid header`)
