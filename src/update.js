@@ -9,6 +9,7 @@ export function update(protocol) {
   DEFS.TYPES = protocol.TYPES
   DEFS.SCHEMES_NAMES = protocol.SCHEMES_NAMES
   DEFS.SCHEMES = protocol.SCHEMES
+  DEFS.RPC = protocol.RPC
   DEFS.compile()
 }
 

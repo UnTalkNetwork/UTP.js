@@ -198,6 +198,7 @@ function update(protocol) {
   defs_default.TYPES = protocol.TYPES;
   defs_default.SCHEMES_NAMES = protocol.SCHEMES_NAMES;
   defs_default.SCHEMES = protocol.SCHEMES;
+  defs_default.RPC = protocol.RPC;
   defs_default.compile();
 }
 function getVersion() {
