@@ -150,7 +150,8 @@ UTP.getVersion() // 10000
   { name: 'VERSION', type: UTP.TYPE.UINT32 },
   { name: 'TYPES', type: UTP.TYPE.JSON },
   { name: 'SCHEMES_NAMES', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.STRING } },
-  { name: 'SCHEMES', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.SCHEMA, schema: 'SCHEMA' } } }
+  { name: 'SCHEMES', type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.ARRAY, items: { type: UTP.TYPE.SCHEMA, schema: 'SCHEMA' } } },
+  { name: 'RPC', type: 'JSON' }
 ]
 ```
 

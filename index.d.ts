@@ -150,16 +150,23 @@ declare function setVersion(version: Number): void;
  */
 declare function getVersion(): Number;
 
+/**
+ * Get protocol definitions object
+ * 
+ * @returns Protocol definitions object
+ */
+declare function getDefinitions(): Object;
+
 export {
   TYPE,
   encode,
   decode,
   addSchema,
-  // addSchemes,
   registerRPC,
   encodeRPC,
   setLock,
   getLock,
   setVersion,
-  getVersion
+  getVersion,
+  getDefinitions,
 };

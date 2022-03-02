@@ -33,7 +33,7 @@ var DEFS = {
   TYPES_NAMES: [],
   SCHEMES: [],
   INDEX: {},
-  RPC: [],
+  RPC: {},
   SIZE_SIZE: 4,
   HEADER_SIZE: 10,
   TEMP_NAME: "__TEMP_NAME__",
@@ -71,7 +71,8 @@ DEFS.SCHEMES[DEFS.INDEX.PROTO] = [
   { name: "VERSION", type: "UINT32" },
   { name: "TYPES", type: "JSON" },
   { name: "SCHEMES_NAMES", type: "ARRAY", items: { type: "STRING" } },
-  { name: "SCHEMES", type: "ARRAY", items: { type: "ARRAY", items: { type: "SCHEMA", schema: "SCHEMA" } } }
+  { name: "SCHEMES", type: "ARRAY", items: { type: "ARRAY", items: { type: "SCHEMA", schema: "SCHEMA" } } },
+  { name: "RPC", type: "JSON" }
 ];
 DEFS.SCHEMES[DEFS.INDEX.RPC] = [
   { name: "method", type: "STRING" },
@@ -223,6 +224,13 @@ function addSchemes(schemes) {
   for (let schema in schemes) {
     addSchema(schema, schemes[schema]);
   }
+}
+function getDefinitions() {
+  let result = {};
+  defs_default.SCHEMES[defs_default.INDEX.PROTO].forEach((field) => {
+    result = Object.assign(result, { [field.name]: defs_default[field.name] });
+  });
+  return result;
 }
 function setLock(isLocked) {
   defs_default.IS_LOCKED = !!isLocked;
@@ -687,7 +695,8 @@ var main_default = {
   encodeRPC,
   setLock,
   setVersion,
-  getVersion
+  getVersion,
+  getDefinitions
 };
 export {
   main_default as default

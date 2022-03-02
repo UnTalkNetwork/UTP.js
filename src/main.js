@@ -2,7 +2,7 @@ import DEFS from './defs.js'
 import { decode } from './decode.js'
 import { encode } from './encode.js'
 import { setLock, setVersion, getVersion } from './update.js'
-import { addSchema, addSchemes } from './update.js'
+import { addSchema, addSchemes, getDefinitions } from './update.js'
 import { registerRPC, encodeRPC } from './rpc.js'
 
 const TYPE = {
@@ -36,4 +36,5 @@ export default {
   setLock,
   setVersion,
   getVersion,
+  getDefinitions,
 }

@@ -82,8 +82,12 @@ function getSchemaDescription(schema) {
   return `${schema}: [ ${result.join(', ')} ]`
 }
 
-function getInfo() {
-  return DEFS
+export function getDefinitions() {
+  let result = {}
+  DEFS.SCHEMES[DEFS.INDEX.PROTO].forEach(field => {
+    result = Object.assign(result, { [field.name]: DEFS[field.name] })
+  })
+  return result
 }
 
  export function getLock(isLocked) {

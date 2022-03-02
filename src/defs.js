@@ -26,7 +26,7 @@ const DEFS = {
   TYPES_NAMES: [],
   SCHEMES: [],
   INDEX: {},
-  RPC: [],
+  RPC: {},
   SIZE_SIZE: 4,
   HEADER_SIZE: 10,
   TEMP_NAME: '__TEMP_NAME__',
@@ -74,7 +74,8 @@ DEFS.SCHEMES[DEFS.INDEX.PROTO] = [
   { name: 'VERSION', type: 'UINT32' },
   { name: 'TYPES', type: 'JSON' },
   { name: 'SCHEMES_NAMES', type: 'ARRAY', items: { type: 'STRING' } },
-  { name: 'SCHEMES', type: 'ARRAY', items: { type: 'ARRAY', items: { type: 'SCHEMA', schema: 'SCHEMA' } } }
+  { name: 'SCHEMES', type: 'ARRAY', items: { type: 'ARRAY', items: { type: 'SCHEMA', schema: 'SCHEMA' } } },
+  { name: 'RPC', type: 'JSON' }
 ]
 
 DEFS.SCHEMES[DEFS.INDEX.RPC] = [

@@ -1,4 +1,5 @@
 import UTP from '../index.js'
+// import UTP from '../src/main.js'
 
 test('PING/PONG', () => {
   const encoded = UTP.encode('PING')
@@ -136,4 +137,10 @@ test('Update', () => {
   const decoded = UTP.decode(encoded)
   
   expect(UTP.decode(UTP.encode()).data.VERSION).toEqual(proto.VERSION)
+})
+
+test('Definitions (PROTO object)', () => {
+  const defs = UTP.getDefinitions()
+  const decoded = UTP.decode(UTP.encode())
+  expect(defs).toEqual(decoded.data)
 })
