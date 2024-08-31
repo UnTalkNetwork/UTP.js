@@ -110,11 +110,11 @@ console.log('Decoded data', packet.data)
  */
 ```
 
-**8. Update protocol definitions on clients**
+**8. Update protocol definitions on client**
 
 ```js
 
-// .... on the server you add new schemes and register RPC methods
+// .... you have added new RPC schemas or methods to the server
 
 UTP.setVersion(10000)
 
